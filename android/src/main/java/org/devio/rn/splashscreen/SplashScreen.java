@@ -2,6 +2,7 @@ package org.devio.rn.splashscreen;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.res.Configuration;
 import android.os.Build;
 
 import java.lang.ref.WeakReference;
@@ -24,12 +25,19 @@ public class SplashScreen {
     public static void show(final Activity activity, final int themeResId) {
         if (activity == null) return;
         mActivity = new WeakReference<Activity>(activity);
+
+
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (!activity.isFinishing()) {
                     mSplashDialog = new Dialog(activity, themeResId);
-                    mSplashDialog.setContentView(R.layout.launch_screen);
+                    if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        mSplashDialog.setContentView(R.layout.launch_screen);
+                    } else {
+                        mSplashDialog.setContentView(R.layout.launch_screen2);
+                    }
+
                     mSplashDialog.setCancelable(false);
 
                     if (!mSplashDialog.isShowing()) {
